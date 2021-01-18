@@ -51,19 +51,12 @@ public class ContactFacade {
         return user;
     }
 
-    public CreateContactDTO createContact(CreateContactDTO contactDTO) {
+    public ContactDTO createContact(ContactDTO contactDTO) {
         EntityManager em = emf.createEntityManager();
 
         try {
             Contact c = new Contact(contactDTO.name, contactDTO.email, contactDTO.company,
                     contactDTO.jobtitle, contactDTO.phone);
-
-            if (!contactDTO.opportunities.isEmpty()) {
-                for (OpportunityDTO opportunity : contactDTO.opportunities) {
-                    c.getOpportunities().add(new Opportunity(opportunity.name,
-                            opportunity.amount, opportunity.closeDate));
-                }
-            }
 
             em.getTransaction().begin();
 

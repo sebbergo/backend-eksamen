@@ -3,6 +3,7 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.ContactDTO;
+import dto.CreateContactDTO;
 import entities.User;
 import facades.ContactFacade;
 import java.io.IOException;
@@ -15,11 +16,14 @@ import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -92,6 +96,18 @@ public class ContactResource {
         setup.setupUsers();
     }
     
+    @Path("create")
+    @POST
+    @Produces ({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String getCreateContact(String contactDTO) {
+        ContactDTO contactDTOResult = gson.fromJson(contactDTO, ContactDTO.class);
+        
+        facade.createContact(contactDTOResult);
+        
+        return gson.toJson(contactDTOResult);
+    }
+    
     @Path("all")
     @GET
     @Produces ({MediaType.APPLICATION_JSON})
@@ -99,5 +115,36 @@ public class ContactResource {
         List<ContactDTO> list = facade.getAllContacts();
         
         return gson.toJson(list);
+    }
+    
+    @Path("get/{id}")
+    @GET
+    @Produces ({MediaType.APPLICATION_JSON})
+    public String getContact(@PathParam("id") long id) {
+        ContactDTO contactDTO = facade.getContact(id);
+        
+        return gson.toJson(contactDTO);
+    }
+    
+    @Path("edit")
+    @PUT
+    @Produces ({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String getContact(String contactDTO) {
+        ContactDTO contactDTOResult = gson.fromJson(contactDTO, ContactDTO.class);
+        
+        facade.editContact(contactDTOResult);
+        
+        return gson.toJson(contactDTOResult);
+    }
+    
+    @Path("delete/{id}")
+    @DELETE
+    @Produces ({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String deleteContact(@PathParam("id") long id) {
+        ContactDTO contactDTO = facade.deleteContact(id);
+        
+        return gson.toJson(contactDTO);
     }
 }
