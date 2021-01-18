@@ -50,6 +50,7 @@ public class ContactEndpointTest {
     private Opportunity op3;
     private Contact c1;
     private Contact c2;
+    private static String securityToken;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -138,6 +139,16 @@ public class ContactEndpointTest {
             em.close();
         }
     }
+    
+    private static void login(String userName, String password) {
+        String json = String.format("{username: \"%s\", password: \"%s\"}", userName, password);
+        securityToken = given()
+                .contentType("application/json")
+                .body(json)
+                .when().post("/login")
+                .then()
+                .extract().path("token");
+    }
 
     @Test
     public void testServerIsUp() {
@@ -164,8 +175,10 @@ public class ContactEndpointTest {
         request.put("jobtitle", "svensker");
         request.put("phone", "923821321");
 
+        login("user", "test");
         given()
                 .contentType("application/json")
+                .header("x-access-token", securityToken)
                 .body(request.toJSONString())
                 .when()
                 .post("/contact/create")
@@ -187,8 +200,10 @@ public class ContactEndpointTest {
 
     @Test
     public void testGetContact() {
+        login("user", "test");
         given()
                 .contentType("application/json")
+                .header("x-access-token", securityToken)
                 .get("/contact/get/" + c1.getId())
                 .then()
                 .assertThat()
@@ -205,8 +220,10 @@ public class ContactEndpointTest {
         request.put("jobtitle", "svensker");
         request.put("phone", "923821321");
 
+        login("user", "test");
         given()
                 .contentType("application/json")
+                .header("x-access-token", securityToken)
                 .body(request.toJSONString())
                 .when()
                 .put("/contact/edit")
@@ -218,12 +235,43 @@ public class ContactEndpointTest {
     
     @Test
     public void testDeleteContact() {
+        login("user", "test");
         given()
                 .contentType("application/json")
+                .header("x-access-token", securityToken)
                 .delete("/contact/delete/" + c1.getId())
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode());
     }
-
+    
+    @Test
+    public void testAddOpportunity(){
+        JSONObject request = new JSONObject();
+        request.put("name", "Danske Bank");
+        request.put("amount", "2000000");
+        request.put("closeDate", "03-04-2024");
+        
+        login("user", "test");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .body(request.toJSONString())
+                .put("/contact/addOpportunity/" + c2.getId())
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+    }
+    
+    @Test
+    public void testGetOpportunitiesFromContact() {
+        login("user", "test");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .get("/contact/getOpportunities/" + c1.getId())
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+    }
 }

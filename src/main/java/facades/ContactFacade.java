@@ -104,7 +104,7 @@ public class ContactFacade {
         }
     }
 
-    public ContactDTO editContact(ContactDTO contactDTO) {
+    public CreateContactDTO editContact(CreateContactDTO contactDTO) {
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -122,7 +122,7 @@ public class ContactFacade {
 
             em.getTransaction().commit();
 
-            return new ContactDTO(contact);
+            return new CreateContactDTO(contact);
 
         } finally {
             em.close();
@@ -149,6 +149,53 @@ public class ContactFacade {
             return new ContactDTO(contact);
             
         } finally {
+            em.close();
+        }
+    }
+    
+    public OpportunityDTO addOpportunityToContact(OpportunityDTO opportunityDTO, long id){
+        EntityManager em = emf.createEntityManager();
+        
+        try{
+            
+            em.getTransaction().begin();
+            
+            Opportunity opportunity = new Opportunity(opportunityDTO.name,
+            opportunityDTO.amount, opportunityDTO.closeDate);
+            
+            Contact contact = em.find(Contact.class, id);
+            
+            contact.addOpportunity(opportunity);
+            
+            em.merge(contact);
+            
+            em.getTransaction().commit();
+            
+            return opportunityDTO;
+            
+        }finally{
+            em.close();
+        }
+    }
+    
+    public List<OpportunityDTO> getOpportunitiesFromContact(long id){
+        EntityManager em = emf.createEntityManager();
+        
+        try{
+            
+            List<OpportunityDTO> opportunityDTOList = new ArrayList();
+            
+            em.getTransaction().begin();
+            
+            Contact contact = em.find(Contact.class, id);
+            
+            for (Opportunity opportunity : contact.getOpportunities()) {
+                opportunityDTOList.add(new OpportunityDTO(opportunity));
+            }
+            
+            return opportunityDTOList;
+            
+        }finally{
             em.close();
         }
     }

@@ -22,6 +22,5 @@ public class OpportunityDTO {
         this.name = opportunity.getName();
         this.amount = opportunity.getAmount();
         this.closeDate = opportunity.getCloseDate();
-        this.opportunityStatus = opportunity.getOpportunityStatus();
     }
 }
