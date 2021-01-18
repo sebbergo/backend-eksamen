@@ -2,11 +2,9 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dto.JokeDTO;
-import entities.Joke;
+import dto.ContactDTO;
 import entities.User;
-import facades.FacadeExample;
-import facades.UserFacade;
+import facades.ContactFacade;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -32,13 +30,13 @@ import utils.*;
 /**
  * @author lam@cphbusiness.dk
  */
-@Path("info")
-public class DemoResource {
+@Path("contact")
+public class ContactResource {
     
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final ExecutorService ES = Executors.newCachedThreadPool();
-    private static final UserFacade FACADE = UserFacade.getUserFacade(EMF);
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final ContactFacade facade = ContactFacade.getUserFacade(EMF);
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static String cachedResponse;
     @Context
     private UriInfo context;
@@ -55,7 +53,7 @@ public class DemoResource {
     //Just to verify if the database has been setup
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("all")
+    @Path("allUsers")
     public String allUsers() {
 
         EntityManager em = EMF.createEntityManager();
@@ -86,49 +84,6 @@ public class DemoResource {
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
     }
     
-    @Path("sw")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getStarWarsParrallel() throws InterruptedException, ExecutionException, TimeoutException {
-        String result = fetcher.StarWarsFetcher.responseFromExternalServersParrallel(ES, GSON);
-        cachedResponse = result;
-        return result;
-    }
-    
-    @Path("planets")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getPlanets() throws InterruptedException, ExecutionException, TimeoutException, IOException {
-        String result = fetcher.StarWarsPlanetFetcher.responseFromExternalServersSequential(ES, GSON);
-        cachedResponse = result;
-        return result;
-    }
-    
-    @Path("countries")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getCountries() throws InterruptedException, ExecutionException, TimeoutException, IOException {
-        String result = fetcher.CountriesFetcher.responseFromExternalServersSequential(ES, GSON);
-        cachedResponse = result;
-        return result;
-    }
-    
-    @Path("joke")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getNewParrallel() throws InterruptedException, ExecutionException, TimeoutException {
-        String result = fetcher.JokeFetcher.responseFromExternalServersParrallel(ES, GSON);
-        cachedResponse = result;
-        return result;
-    }
-
-    @Path("cached")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getStarWarsCached() throws InterruptedException, ExecutionException, TimeoutException {
-        return cachedResponse;
-    }
-    
     @Path("setup")
     @GET
     @Produces ({MediaType.APPLICATION_JSON})
@@ -137,13 +92,12 @@ public class DemoResource {
         setup.setupUsers();
     }
     
-    @Path("storeJoke")
-    @POST
+    @Path("all")
+    @GET
     @Produces ({MediaType.APPLICATION_JSON})
-    public String storeJoke() {
-        JokeDTO jokeDTO = GSON.fromJson(cachedResponse, JokeDTO.class);
-        FACADE.storeJoke(jokeDTO.getJoke());
+    public String getContactList() {
+        List<ContactDTO> list = facade.getAllContacts();
         
-        return GSON.toJson(jokeDTO);
+        return gson.toJson(list);
     }
 }
