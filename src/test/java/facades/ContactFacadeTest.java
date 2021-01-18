@@ -124,19 +124,11 @@ public class ContactFacadeTest {
 
     @Test
     public void testCreateContact() throws AuthenticationException {
-        Opportunity op1 = new Opportunity("test1", "1234", "03-1-2021");
-        Opportunity op2 = new Opportunity("test2", "3214", "08-2-2023");
-        Opportunity op3 = new Opportunity("test3", "12300", "11-3-2024");
-
         Contact contact = new Contact("Luke", "test@yahoo.com", "kodegudere", "kodeguden", "87654321");
 
-        contact.addOpportunity(op1);
-        contact.addOpportunity(op2);
-        contact.addOpportunity(op3);
+        ContactDTO contactDTO = new ContactDTO(contact);
 
-        CreateContactDTO contactDTO = new CreateContactDTO(contact);
-
-        CreateContactDTO contactResult = facade.createContact(contactDTO);
+        ContactDTO contactResult = facade.createContact(contactDTO);
 
         assertEquals(contactDTO.name, contactResult.name);
         assertEquals(contactDTO.email, contactResult.email);
