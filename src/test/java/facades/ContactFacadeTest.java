@@ -188,6 +188,7 @@ public class ContactFacadeTest {
     @Test
     public void testAddOpportunityToContact(){
         Opportunity opportunity = new Opportunity("desing", "10000", "07-3-2021");
+        opportunity.setId((long)5);
         OpportunityDTO opportunityDTO = new OpportunityDTO(opportunity);
         long id = (long)c2.getId();
         

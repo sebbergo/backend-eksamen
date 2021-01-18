@@ -6,19 +6,19 @@
 package dto;
 
 import entities.Opportunity;
-import entities.OpportunityStatus;
 
 /**
  *
  * @author sebas
  */
 public class OpportunityDTO {
+    public long id;
     public String name;
     public String amount;
     public String closeDate;
-    public OpportunityStatus opportunityStatus;
 
     public OpportunityDTO(Opportunity opportunity) {
+        this.id = opportunity.getId();
         this.name = opportunity.getName();
         this.amount = opportunity.getAmount();
         this.closeDate = opportunity.getCloseDate();
