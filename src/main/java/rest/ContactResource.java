@@ -124,7 +124,7 @@ public class ContactResource {
     @Path("get/{id}")
     @GET
     @Produces ({MediaType.APPLICATION_JSON})
-    public String getContact(@PathParam("id") long id) throws NotFoundException {
+    public String getContact(@PathParam("id") long id) {
         ContactDTO contactDTO = facade.getContact(id);
         
         return gson.toJson(contactDTO);

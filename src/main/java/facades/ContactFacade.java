@@ -92,16 +92,12 @@ public class ContactFacade {
         return contactDTOList;
     }
 
-    public ContactDTO getContact(long id) throws NotFoundException {
+    public ContactDTO getContact(long id) {
         EntityManager em = emf.createEntityManager();
 
         try {
             Contact contact = em.find(Contact.class, id);
 
-            if(contact == null){
-                throw new NotFoundException("Contact specified could not be found");
-            }
-            
             return new ContactDTO(contact);
 
         } finally {
