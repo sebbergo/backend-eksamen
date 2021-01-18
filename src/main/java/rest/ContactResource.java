@@ -6,6 +6,7 @@ import dto.ContactDTO;
 import dto.CreateContactDTO;
 import dto.OpportunityDTO;
 import entities.User;
+import errorhandling.NotFoundException;
 import facades.ContactFacade;
 import java.io.IOException;
 import java.util.List;

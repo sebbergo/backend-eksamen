@@ -6,6 +6,7 @@ import dto.OpportunityDTO;
 import entities.Contact;
 import entities.Opportunity;
 import entities.User;
+import errorhandling.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -153,15 +154,15 @@ public class ContactFacade {
         }
     }
     
-    public OpportunityDTO addOpportunityToContact(OpportunityDTO opportunityDTO, long id){
+    public OpportunityDTO addOpportunityToContact(OpportunityDTO OpportunityDTO, long id){
         EntityManager em = emf.createEntityManager();
         
         try{
             
             em.getTransaction().begin();
             
-            Opportunity opportunity = new Opportunity(opportunityDTO.name,
-            opportunityDTO.amount, opportunityDTO.closeDate);
+            Opportunity opportunity = new Opportunity(OpportunityDTO.name,
+            OpportunityDTO.amount, OpportunityDTO.closeDate);
             
             Contact contact = em.find(Contact.class, id);
             
@@ -171,7 +172,7 @@ public class ContactFacade {
             
             em.getTransaction().commit();
             
-            return opportunityDTO;
+            return OpportunityDTO;
             
         }finally{
             em.close();

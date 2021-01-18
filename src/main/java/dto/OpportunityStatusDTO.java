@@ -16,17 +16,9 @@ import java.util.List;
  */
 public class OpportunityStatusDTO {
     public String name;
-    public List<OpportunityDTO> opportunities;
 
     public OpportunityStatusDTO(OpportunityStatus opportunityStatus) {
         this.name = opportunityStatus.getName();
-        
-        this.opportunities = new ArrayList();
-        if(!opportunityStatus.getOpportunities().isEmpty()){
-            for (Opportunity opportunity : opportunityStatus.getOpportunities()) {
-                this.opportunities.add(new OpportunityDTO(opportunity));
-            }
-        }
     }
     
 }
