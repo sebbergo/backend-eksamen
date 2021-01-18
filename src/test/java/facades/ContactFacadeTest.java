@@ -3,6 +3,7 @@ package facades;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.ContactDTO;
+import dto.CreateContactDTO;
 import entities.Contact;
 import entities.Opportunity;
 import entities.OpportunityStatus;
@@ -133,9 +134,9 @@ public class ContactFacadeTest {
         contact.addOpportunity(op2);
         contact.addOpportunity(op3);
 
-        ContactDTO contactDTO = new ContactDTO(contact);
+        CreateContactDTO contactDTO = new CreateContactDTO(contact);
 
-        ContactDTO contactResult = facade.createContact(contactDTO);
+        CreateContactDTO contactResult = facade.createContact(contactDTO);
 
         assertEquals(contactDTO.name, contactResult.name);
         assertEquals(contactDTO.email, contactResult.email);

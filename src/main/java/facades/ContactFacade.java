@@ -1,6 +1,7 @@
 package facades;
 
 import dto.ContactDTO;
+import dto.CreateContactDTO;
 import dto.OpportunityDTO;
 import entities.Contact;
 import entities.Opportunity;
@@ -50,7 +51,7 @@ public class ContactFacade {
         return user;
     }
 
-    public ContactDTO createContact(ContactDTO contactDTO) {
+    public CreateContactDTO createContact(CreateContactDTO contactDTO) {
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -85,7 +86,7 @@ public class ContactFacade {
 
             TypedQuery query = em.createQuery("SELECT c FROM Contact c", Contact.class);
             List<Contact> contactList = query.getResultList();
-
+            
             for (Contact contact : contactList) {
                 contactDTOList.add(new ContactDTO(contact));
             }
