@@ -96,6 +96,7 @@ public class ContactFacade {
         EntityManager em = emf.createEntityManager();
 
         try {
+            
             Contact contact = em.find(Contact.class, id);
 
             return new ContactDTO(contact);
