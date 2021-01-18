@@ -1,6 +1,5 @@
 package rest;
 
-import entities.RenameMe;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -27,7 +26,6 @@ public class RenameMeResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static RenameMe r1, r2;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -80,7 +78,7 @@ public class RenameMeResourceTest {
 
     @Test
     public void testServerIsUp() {
-        given().when().get("/info").then().statusCode(200);
+        given().when().get("/contact").then().statusCode(200);
     }
 
     //This test assumes the database contains two rows
@@ -88,43 +86,10 @@ public class RenameMeResourceTest {
     public void testDummyMsg() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/info/").then()
+                .get("/contact/").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
                 .body("msg", equalTo("Hello anonymous"));
     }
 
-    @Disabled
-    @Test
-    @Order(1)
-    public void testParrallel() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/info/sw").then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("peopleName", equalTo("Luke Skywalker"))
-                .body("planetName", equalTo("Yavin IV"))
-                .body("speciesName", equalTo("Ewok"))
-                .body("starshipName", equalTo("Star Destroyer"))
-                .body("vehicleName", equalTo("Sand Crawler"));
-
- 
-    }
-    
-    @Disabled
-    @Test
-    @Order(2)
-    public void testCached() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/info/cached").then()            
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("peopleName", equalTo("Luke Skywalker"))
-                .body("planetName", equalTo("Yavin IV"))
-                .body("speciesName", equalTo("Ewok"))
-                .body("starshipName", equalTo("Star Destroyer"))
-                .body("vehicleName", equalTo("Sand Crawler"));
-    }
 }

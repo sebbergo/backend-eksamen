@@ -5,18 +5,18 @@
  */
 package dto;
 
+import entities.User;
+
 /**
  *
  * @author sebas
  */
-public class CountriesDTO {
-    
-    public String Country;
-    public String Slug;
+public class UserDTO {
 
-    public CountriesDTO(String Country, String Slug) {
-        this.Country = Country;
-        this.Slug = Slug;
+    public String userName;
+
+    public UserDTO(User user) {
+        this.userName = user.getUserName();
     }
 
 }

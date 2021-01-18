@@ -1,7 +1,6 @@
 package utils;
 
 
-import entities.Joke;
 import entities.Role;
 import entities.User;
 
