@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.ContactDTO;
 import dto.CreateContactDTO;
+import dto.OpportunityDTO;
 import entities.Contact;
 import entities.Opportunity;
 import entities.OpportunityStatus;
@@ -172,10 +173,10 @@ public class ContactFacadeTest {
     @Test
     public void testEditContact() {
         Contact contact = new Contact("Sumit", "test@gmail.org", "kernen", "CEO", "91827302");
-        ContactDTO contactDTO = new ContactDTO(contact);
+        CreateContactDTO contactDTO = new CreateContactDTO(contact);
         contactDTO.id = (long) 1;
 
-        ContactDTO contactResult = facade.editContact(contactDTO);
+        CreateContactDTO contactResult = facade.editContact(contactDTO);
 
         assertEquals(contactDTO.name, contactResult.name);
         assertEquals(contactDTO.email, contactResult.email);
@@ -183,5 +184,23 @@ public class ContactFacadeTest {
         assertEquals(contactDTO.jobtitle, contactResult.jobtitle);
         assertEquals(contactDTO.phone, contactResult.phone);
     }
+    
+    @Test
+    public void testAddOpportunityToContact(){
+        Opportunity opportunity = new Opportunity("desing", "10000", "07-3-2021");
+        OpportunityDTO opportunityDTO = new OpportunityDTO(opportunity);
+        long id = (long)c2.getId();
+        
+        OpportunityDTO opportunityDTOResult = facade.addOpportunityToContact(opportunityDTO, id);
+        
+        assertEquals(opportunityDTOResult.name, opportunity.getName());
+        assertEquals("Chris", c2.getName());
+    }
 
+    @Test
+    public void testGetOpportunitiesFromContact(){
+        List<OpportunityDTO> opportunityDTOList = facade.getOpportunitiesFromContact(c1.getId());
+        
+        assertEquals(opportunityDTOList.size(), c1.getOpportunities().size());
+    }
 }

@@ -23,6 +23,7 @@ public class ContactDTO {
     public String phone;
 
     public ContactDTO(Contact contact) {
+        this.id = contact.getId();
         this.name = contact.getName();
         this.email = contact.getEmail();
         this.company = contact.getCompany();

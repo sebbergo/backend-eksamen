@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dto.ContactDTO;
 import dto.CreateContactDTO;
+import dto.OpportunityDTO;
 import entities.User;
 import facades.ContactFacade;
 import java.io.IOException;
@@ -96,6 +97,7 @@ public class ContactResource {
         setup.setupUsers();
     }
     
+    @RolesAllowed("user")
     @Path("create")
     @POST
     @Produces ({MediaType.APPLICATION_JSON})
@@ -117,6 +119,7 @@ public class ContactResource {
         return gson.toJson(list);
     }
     
+    @RolesAllowed("user")
     @Path("get/{id}")
     @GET
     @Produces ({MediaType.APPLICATION_JSON})
@@ -126,18 +129,20 @@ public class ContactResource {
         return gson.toJson(contactDTO);
     }
     
+    @RolesAllowed("user")
     @Path("edit")
     @PUT
     @Produces ({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public String getContact(String contactDTO) {
-        ContactDTO contactDTOResult = gson.fromJson(contactDTO, ContactDTO.class);
+        CreateContactDTO contactDTOResult = gson.fromJson(contactDTO, CreateContactDTO.class);
         
         facade.editContact(contactDTOResult);
         
         return gson.toJson(contactDTOResult);
     }
     
+    @RolesAllowed("user")
     @Path("delete/{id}")
     @DELETE
     @Produces ({MediaType.APPLICATION_JSON})
@@ -146,5 +151,29 @@ public class ContactResource {
         ContactDTO contactDTO = facade.deleteContact(id);
         
         return gson.toJson(contactDTO);
+    }
+    
+    @RolesAllowed("user")
+    @Path("addOpportunity/{id}")
+    @PUT
+    @Produces ({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String addOpportunityToContact(@PathParam("id") long id, String opportunityDTO) {
+        OpportunityDTO opportunityDTOResult = gson.fromJson(opportunityDTO, OpportunityDTO.class);
+        
+        OpportunityDTO opportunityDTOReturn = facade.addOpportunityToContact(opportunityDTOResult, id);
+        
+        return gson.toJson(opportunityDTOReturn);
+    }
+    
+    @RolesAllowed("user")
+    @Path("getOpportunities/{id}")
+    @GET
+    @Produces ({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public String addOpportunityToContact(@PathParam("id") long id) {
+        List<OpportunityDTO> opportunityDTOList = facade.getOpportunitiesFromContact(id);
+        
+        return gson.toJson(opportunityDTOList);
     }
 }
