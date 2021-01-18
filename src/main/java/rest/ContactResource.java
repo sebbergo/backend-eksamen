@@ -6,6 +6,7 @@ import dto.ContactDTO;
 import dto.CreateContactDTO;
 import dto.OpportunityDTO;
 import entities.User;
+import errorhandling.NotFoundException;
 import facades.ContactFacade;
 import java.io.IOException;
 import java.util.List;
@@ -123,7 +124,7 @@ public class ContactResource {
     @Path("get/{id}")
     @GET
     @Produces ({MediaType.APPLICATION_JSON})
-    public String getContact(@PathParam("id") long id) {
+    public String getContact(@PathParam("id") long id) throws NotFoundException {
         ContactDTO contactDTO = facade.getContact(id);
         
         return gson.toJson(contactDTO);
